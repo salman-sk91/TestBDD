@@ -17,7 +17,7 @@ public class Reporter {
     public static void  generateReport(){
         File reportOutputDirectory = new File("htmlReport");
         List<String> jsonFiles = new ArrayList<>();
-        jsonFiles.add(System.getProperty("user.dir") + "\\jsonFiles\\cucumber-json-report.json");
+        jsonFiles.add(System.getProperty("user.dir") + "/jsonFiles/cucumber-json-report.json");
         //jsonFiles.add("cucumber-report-2.json");
 
         String buildNumber = "1";
