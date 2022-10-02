@@ -31,6 +31,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests!
+      - run: mvn install
       - run: mvn exec:java -Dexec.classpathScope=test -Dexec.mainClass=io.cucumber.core.cli.Main -Dcucumber.filter.tags=" @L2 and not (@ignore or @salman) " -Dcucumber.glue="steps" -Dcucumber.plugin="pretty, html:target/htmlFile/result.html,json:jsonFiles/cucumber-json-report.json"
       
       # reporting
