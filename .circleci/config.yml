@@ -1,0 +1,42 @@
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: cimg/openjdk:11.0.13
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-            
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+
+      # run tests!
+      - run: mvn exec:java -Dexec.classpathScope=test -Dexec.mainClass=io.cucumber.core.cli.Main -Dcucumber.filter.tags=" @L2 and not (@ignore or @salman) " -Dcucumber.glue="steps" -Dcucumber.plugin="pretty, html:target/htmlFile/result.html,json:jsonFiles/cucumber-json-report.json"
+      
+      # reporting
+      
+      - run: mvn exec:java -Dexec.mainClass="steps.Reporter"
+
+      - store_artifacts:
+          path: /home/circleci/repo/htmlReport
+          destination: reports
